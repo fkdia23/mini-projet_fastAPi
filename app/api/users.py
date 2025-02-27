@@ -13,7 +13,7 @@ from app.dependencies import get_current_active_user
 
 router = APIRouter()
 
-@router.get("/", response_model=List[UserSchema])
+@router.get("/")
 def read_users(
     db: Session = Depends(get_db),
     skip: int = 0,
@@ -27,7 +27,7 @@ def read_users(
     return users
 
 
-@router.get("/{user_id}", response_model=UserSchema)
+@router.get("/{user_id}")
 def read_user(
     user_id: int,
     db: Session = Depends(get_db),
@@ -45,7 +45,7 @@ def read_user(
     return user
 
 
-@router.put("/{user_id}", response_model=UserSchema)
+@router.put("/{user_id}")
 def update_user_endpoint(
     user_id: int,
     user_in: UserUpdate,
@@ -73,30 +73,30 @@ def update_user_endpoint(
     return user
 
 
-# @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
-# def delete_user_endpoint(
-#     user_id: int,
-#     db: Session = Depends(get_db),
-#     current_user: User = Depends(get_current_active_user),
-# ) -> Any:
-#     """
-#     Supprime un utilisateur.
-#     """
-#     # Vérifier si c'est l'utilisateur courant qui se supprime lui-même
-#     if current_user.id != user_id:
-#         raise HTTPException(
-#             status_code=status.HTTP_403_FORBIDDEN,
-#             detail="Not enough permissions"
-#         )
+@router.delete("/{user_id}")
+def delete_user_endpoint(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+    """
+    Supprime un utilisateur.
+    """
+    # Vérifier si c'est l'utilisateur courant qui se supprime lui-même
+    if current_user.id != user_id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not enough permissions"
+        )
     
-#     user = get_user(db, user_id=user_id)
-#     if user is None:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail="User not found"
-#         )
+    user = get_user(db, user_id=user_id)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
     
-#     delete_user(db, user_id=user_id)
+    delete_user(db, user_id=user_id)
 
 
 @router.get("/{user_id}/articles", response_model=List[Article])

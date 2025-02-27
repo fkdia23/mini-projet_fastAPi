@@ -11,7 +11,7 @@ from app.dependencies import get_current_active_user
 
 router = APIRouter()
 
-@router.get("/", response_model=List[Article])
+@router.get("/")
 def read_articles(
     db: Session = Depends(get_db),
     skip: int = 0,
@@ -25,7 +25,7 @@ def read_articles(
     return articles
 
 
-@router.get("/{article_id}", response_model=Article)
+@router.get("/{article_id}")
 def read_article(
     article_id: int,
     db: Session = Depends(get_db),
@@ -43,7 +43,7 @@ def read_article(
     return article
 
 
-@router.post("/", response_model=Article, status_code=status.HTTP_201_CREATED)
+@router.post("/", status_code=status.HTTP_201_CREATED)
 def create_article_endpoint(
     article_in: ArticleCreate,
     db: Session = Depends(get_db),
@@ -56,7 +56,7 @@ def create_article_endpoint(
     return article
 
 
-@router.put("/{article_id}", response_model=Article)
+@router.put("/{article_id}")
 def update_article_endpoint(
     article_id: int,
     article_in: ArticleUpdate,
@@ -84,7 +84,7 @@ def update_article_endpoint(
     return article
 
 
-# @router.delete("/{article_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/{article_id}")
 def delete_article_endpoint(
     article_id: int,
     db: Session = Depends(get_db),
