@@ -83,7 +83,7 @@ def delete_user_endpoint(
     Supprime un utilisateur.
     """
     # Vérifier si c'est l'utilisateur courant qui se supprime lui-même
-    if current_user.id != user_id:
+    if current_user.id == user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not enough permissions"
